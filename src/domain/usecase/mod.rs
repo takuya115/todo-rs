@@ -1,5 +1,6 @@
 use super::ToDoId;
 
-pub trait ToDoUsecase {
+pub trait ToDoUseCase {
     fn create(todo: String) -> ToDoId;
+    fn delete(todo: ToDoId) -> bool;
 }
