@@ -1,13 +1,9 @@
-use chrono::{DateTime, Utc};
-use uuid::Uuid;
+mod id;
+pub use id::*;
+mod error;
+pub use error::*;
 
-#[derive(Debug)]
-pub struct ToDoId(Uuid);
-impl ToDoId {
-    fn new() -> Self {
-        ToDoId(Uuid::new_v4())
-    }
-}
+use chrono::{DateTime, Utc};
 
 // todo domain model
 #[derive(Debug)]
@@ -17,16 +13,4 @@ pub struct ToDo {
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
     pub is_done: bool,
-}
-
-#[test]
-fn ok() {
-    let todo = ToDo {
-        id: ToDoId::new(),
-        message: "test-massage".to_string(),
-        created_at: Utc::now(),
-        updated_at: Utc::now(),
-        is_done: false,
-    };
-    println!("{todo:?}");
 }
