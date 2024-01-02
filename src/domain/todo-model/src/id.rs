@@ -27,7 +27,12 @@ mod test {
     #[test]
     fn ok_from_str() {
         let s = "550e8400-e29b-41d4-a716-446655440000";
-        let id = ToDoId::from_str(s);
-        assert!(id.is_ok())
+        assert!(ToDoId::from_str(s).is_ok())
+    }
+
+    #[test]
+    fn err_from_str() {
+        let s = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+        assert!(ToDoId::from_str(s).is_err())
     }
 }
