@@ -13,3 +13,15 @@ pub struct ToDo {
     pub updated_at: DateTime<Utc>,
     pub done: bool,
 }
+
+impl Default for ToDo {
+    fn default() -> Self {
+        Self {
+            id: ToDoId::generate(),
+            content: String::default(),
+            created_at: Utc::now(),
+            updated_at: Utc::now(),
+            done: false,
+        }
+    }
+}
