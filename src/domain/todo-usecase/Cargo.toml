@@ -7,6 +7,6 @@ edition = "2021"
 
 [dependencies]
 todo-model = { path = "../todo-model" }
-async-trait = "0.1.76"
+async-trait = { workspace = true }
 thiserror = { workspace = true }
 chrono = { workspace = true }

@@ -1678,6 +1678,7 @@ dependencies = [
 name = "rdb"
 version = "0.1.0"
 dependencies = [
+ "async-trait",
  "sea-orm",
  "todo-model",
  "todo-usecase",

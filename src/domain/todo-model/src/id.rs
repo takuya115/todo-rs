@@ -20,6 +20,18 @@ impl FromStr for TodoId {
     }
 }
 
+impl From<Uuid> for TodoId {
+    fn from(value: Uuid) -> Self {
+        Self(value)
+    }
+}
+
+impl From<TodoId> for Uuid {
+    fn from(value: TodoId) -> Self {
+        value.0
+    }
+}
+
 #[cfg(test)]
 mod test {
     use super::*;

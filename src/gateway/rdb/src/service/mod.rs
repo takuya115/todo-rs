@@ -1,5 +1,11 @@
+mod insert_todo;
+use async_trait::async_trait;
 use sea_orm::{ConnectOptions, Database, DatabaseConnection};
-use todo_usecase::error::{Error, Result};
+use todo_model::{Todo, TodoId};
+use todo_usecase::{
+    error::{Error, Result},
+    gateway::rdb::RdbService,
+};
 
 /// RDBの具象
 pub struct RdbServiceImpl {
@@ -14,5 +20,12 @@ impl RdbServiceImpl {
         Database::connect(opt)
             .await
             .map_err(|err| Error::Unknown(Box::new(err)))
+    }
+}
+
+#[async_trait]
+impl RdbService for RdbServiceImpl {
+    async fn create_todo(&self, id: TodoId, content: String) -> Result<Todo> {
+        todo!()
     }
 }
