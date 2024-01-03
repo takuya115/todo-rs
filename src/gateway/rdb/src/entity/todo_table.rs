@@ -8,10 +8,10 @@ use todo_model::Todo;
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
     pub id: Uuid,
-    pub message: String,
-    pub created_at: ChronoDateTimeUtc,
-    pub updated_at: ChronoDateTimeUtc,
-    pub is_done: bool,
+    pub content: String,
+    pub created_at: DateTimeUtc,
+    pub updated_at: DateTimeUtc,
+    pub done: bool,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
@@ -23,10 +23,10 @@ impl From<Model> for Todo {
     fn from(value: Model) -> Self {
         Self {
             id: value.id.into(),
-            content: value.message,
+            content: value.content,
             created_at: value.created_at,
             updated_at: value.updated_at,
-            done: value.is_done,
+            done: value.done,
         }
     }
 }

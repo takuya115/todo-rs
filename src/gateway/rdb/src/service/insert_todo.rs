@@ -11,8 +11,8 @@ impl RdbServiceImpl {
         let conn = self.connect().await?;
         let todo_entity = todo_table::ActiveModel {
             id: Set(id.into()),
-            message: Set(content),
-            is_done: Set(false),
+            content: Set(content),
+            done: Set(false),
             ..Default::default()
         };
         let record = todo_entity

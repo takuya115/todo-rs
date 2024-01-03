@@ -19,7 +19,7 @@ impl MigrationTrait for Migration {
                             .not_null()
                             .primary_key(),
                     )
-                    .col(ColumnDef::new(TodoTable::Message).string().not_null())
+                    .col(ColumnDef::new(TodoTable::Content).string().not_null())
                     .col(
                         ColumnDef::new(TodoTable::CreatedAt)
                             .date_time()
@@ -33,7 +33,7 @@ impl MigrationTrait for Migration {
                             .default(Expr::current_timestamp()),
                     )
                     .col(
-                        ColumnDef::new(TodoTable::IsDone)
+                        ColumnDef::new(TodoTable::Done)
                             .boolean()
                             .not_null()
                             .default(false),
@@ -55,8 +55,8 @@ impl MigrationTrait for Migration {
 enum TodoTable {
     Table,
     Id,
-    Message,
+    Content,
     CreatedAt,
     UpdatedAt,
-    IsDone,
+    Done,
 }
