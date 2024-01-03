@@ -5,9 +5,15 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+
+[[bin]]
+name = "todo-app"
+path = "./src/app/src/main.rs"
+
 [workspace]
 members = [
     "./migration",
+    "./src/app",
     "./src/domain/todo-model",
     "./src/domain/todo-usecase",
     "./src/gateway/rdb",
