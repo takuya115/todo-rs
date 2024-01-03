@@ -11,14 +11,12 @@ pub struct CreateTodoInput {
 }
 
 impl Interactor {
-    pub async fn create_todo(input: CreateTodoInput) -> Result<Todo> {
+    pub async fn create_todo(&self, input: CreateTodoInput) -> Result<Todo> {
         let content =
             Text::from_str(&input.content).map_err(|err| Error::InvalidInput(Box::new(err)))?;
-        let _todo = Todo {
-            id: TodoId::generate(),
-            content,
-            ..Default::default()
-        };
-        todo!()
+        self.gateway
+            .db_service()
+            .create_todo(TodoId::generate(), content)
+            .await
     }
 }
