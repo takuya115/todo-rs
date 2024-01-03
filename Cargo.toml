@@ -6,13 +6,15 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [workspace]
-members = ["./src/domain/todo-model", "./src/domain/todo-usecase"]
+members = [
+    "./migration",
+    "./src/domain/todo-model",
+    "./src/domain/todo-usecase",
+    "./src/gateway/rdb",
+]
 
 [workspace.dependencies]
 thiserror = "1.0.53"
-sea-orm = { version = "0.12.2", features = [
-    "sqlx-postgres",
-    "runtime-tokio-rustls",
-    "macros",
-] }
 chrono = "0.4.26"
+serde = "1.0.193"
+serde_json = "1.0.109"
