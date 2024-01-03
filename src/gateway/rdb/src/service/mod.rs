@@ -7,6 +7,8 @@ use todo_usecase::{
     gateway::rdb::RdbService,
 };
 
+use crate::entity::todo_table;
+
 /// RDBの具象
 pub struct RdbServiceImpl {
     pub db_url: String,
@@ -27,5 +29,17 @@ impl RdbServiceImpl {
 impl RdbService for RdbServiceImpl {
     async fn create_todo(&self, id: TodoId, content: String) -> Result<Todo> {
         self.handle_create_todo(id, content).await
+    }
+}
+
+impl From<todo_table::Model> for Todo {
+    fn from(value: todo_table::Model) -> Self {
+        Self {
+            id: value.id.into(),
+            content: value.content,
+            created_at: value.created_at,
+            updated_at: value.updated_at,
+            done: value.done,
+        }
     }
 }
