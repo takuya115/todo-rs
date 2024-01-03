@@ -1,4 +1,4 @@
-use todo_model::{ToDo, ToDoId};
+use todo_model::{Todo, TodoId};
 
 use crate::error::Result;
 
@@ -9,9 +9,9 @@ pub struct CreateTodoInput {
 }
 
 impl Interactor {
-    pub async fn create_todo(input: CreateTodoInput) -> Result<ToDo> {
-        let _todo = ToDo {
-            id: ToDoId::generate(),
+    pub async fn create_todo(input: CreateTodoInput) -> Result<Todo> {
+        let _todo = Todo {
+            id: TodoId::generate(),
             content: input.content,
             ..Default::default()
         };

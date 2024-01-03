@@ -5,14 +5,14 @@ use uuid::Uuid;
 use crate::ModelError;
 
 #[derive(Debug)]
-pub struct ToDoId(Uuid);
-impl ToDoId {
+pub struct TodoId(Uuid);
+impl TodoId {
     pub fn generate() -> Self {
-        ToDoId(Uuid::new_v4())
+        TodoId(Uuid::new_v4())
     }
 }
 
-impl FromStr for ToDoId {
+impl FromStr for TodoId {
     type Err = ModelError;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let uuid = Uuid::from_str(s).map_err(|err| ModelError::Validation(format!("{:?}", err)))?;
@@ -27,12 +27,12 @@ mod test {
     #[test]
     fn ok_from_str() {
         let s = "550e8400-e29b-41d4-a716-446655440000";
-        assert!(ToDoId::from_str(s).is_ok())
+        assert!(TodoId::from_str(s).is_ok())
     }
 
     #[test]
     fn err_from_str() {
         let s = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-        assert!(ToDoId::from_str(s).is_err())
+        assert!(TodoId::from_str(s).is_err())
     }
 }

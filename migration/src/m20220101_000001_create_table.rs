@@ -11,29 +11,29 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(ToDoTable::Table)
+                    .table(TodoTable::Table)
                     .if_not_exists()
                     .col(
-                        ColumnDef::new(ToDoTable::Id)
+                        ColumnDef::new(TodoTable::Id)
                             .uuid()
                             .not_null()
                             .primary_key(),
                     )
-                    .col(ColumnDef::new(ToDoTable::Message).string().not_null())
+                    .col(ColumnDef::new(TodoTable::Message).string().not_null())
                     .col(
-                        ColumnDef::new(ToDoTable::CreatedAt)
+                        ColumnDef::new(TodoTable::CreatedAt)
                             .date_time()
                             .not_null()
                             .default(Expr::current_timestamp()),
                     )
                     .col(
-                        ColumnDef::new(ToDoTable::UpdatedAt)
+                        ColumnDef::new(TodoTable::UpdatedAt)
                             .date_time()
                             .not_null()
                             .default(Expr::current_timestamp()),
                     )
                     .col(
-                        ColumnDef::new(ToDoTable::IsDone)
+                        ColumnDef::new(TodoTable::IsDone)
                             .boolean()
                             .not_null()
                             .default(false),
@@ -46,13 +46,13 @@ impl MigrationTrait for Migration {
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         // Replace the sample below with your own migration scripts
         manager
-            .drop_table(Table::drop().table(ToDoTable::Table).to_owned())
+            .drop_table(Table::drop().table(TodoTable::Table).to_owned())
             .await
     }
 }
 
 #[derive(DeriveIden)]
-enum ToDoTable {
+enum TodoTable {
     Table,
     Id,
     Message,

@@ -6,18 +6,18 @@ pub use error::*;
 use chrono::{DateTime, Utc};
 
 #[derive(Debug)]
-pub struct ToDo {
-    pub id: ToDoId,
+pub struct Todo {
+    pub id: TodoId,
     pub content: String,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
     pub done: bool,
 }
 
-impl Default for ToDo {
+impl Default for Todo {
     fn default() -> Self {
         Self {
-            id: ToDoId::generate(),
+            id: TodoId::generate(),
             content: String::default(),
             created_at: Utc::now(),
             updated_at: Utc::now(),
