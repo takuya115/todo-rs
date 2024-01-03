@@ -7,11 +7,11 @@ use crate::entity::todo_table;
 use super::RdbServiceImpl;
 
 impl RdbServiceImpl {
-    pub(crate) async fn handle_insert_todo(&self, id: TodoId, message: String) -> Result<Todo> {
+    pub(crate) async fn handle_create_todo(&self, id: TodoId, content: String) -> Result<Todo> {
         let conn = self.connect().await?;
         let todo_entity = todo_table::ActiveModel {
             id: Set(id.into()),
-            message: Set(message),
+            message: Set(content),
             is_done: Set(false),
             ..Default::default()
         };

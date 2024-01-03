@@ -26,6 +26,6 @@ impl RdbServiceImpl {
 #[async_trait]
 impl RdbService for RdbServiceImpl {
     async fn create_todo(&self, id: TodoId, content: String) -> Result<Todo> {
-        todo!()
+        self.handle_create_todo(id, content).await
     }
 }
