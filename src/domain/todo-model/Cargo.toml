@@ -9,3 +9,6 @@ edition = "2021"
 uuid = { version = "1.4.1", features = ["v4"] }
 chrono = { workspace = true }
 thiserror = { workspace = true }
+
+[dev-dependencies]
+rstest = "*"
