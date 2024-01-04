@@ -1,11 +1,11 @@
 [workspace]
 members = [
-    "./migration",
     "./src/app",
     "./src/domain/todo-model",
     "./src/domain/todo-usecase",
     "./src/gateway/rdb",
 ]
+exclude = ["./migration"]
 
 [workspace.dependencies]
 thiserror = "1.0.53"

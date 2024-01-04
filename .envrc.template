@@ -1,1 +1,2 @@
 export DATABASE_URL="postgres://root:postgres@localhost"
+export SERVER_HOST="0.0.0.0:3000"
