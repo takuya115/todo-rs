@@ -1,0 +1,12 @@
+[package]
+name = "todo-usecase"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+todo-model = { path = "../todo-model" }
+async-trait = { workspace = true }
+thiserror = { workspace = true }
+chrono = { workspace = true }
