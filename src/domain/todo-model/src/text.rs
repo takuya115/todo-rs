@@ -23,7 +23,7 @@ impl FromStr for Text {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let s = s.trim();
         match s.chars().count() {
-            c if c == 0 => Err(ModelError::Validation("Text is empty".into())),
+            0 => Err(ModelError::Validation("Text is empty".into())),
             c if c > Self::MAX_LENGTH => Err(ModelError::Validation("Over upper limit".into())),
             _ => Ok(Self(s.into())),
         }
