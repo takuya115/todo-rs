@@ -11,3 +11,9 @@ pub enum Error {
     #[error("unknown: {0:?}")]
     Unknown(Box<dyn Debug>),
 }
+
+impl Error {
+    pub fn invalid_input<E: Debug + 'static>(err: E) -> Self {
+        Self::InvalidInput(Box::new(err))
+    }
+}
