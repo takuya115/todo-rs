@@ -84,6 +84,7 @@ dependencies = [
  "axum",
  "rdb",
  "serde",
+ "serde_json",
  "todo-model",
  "todo-usecase",
  "tokio",
