@@ -1,25 +1,22 @@
 mod api;
 mod config;
+mod gateway;
 
 use std::sync::Arc;
 
 use axum::{routing::get, Extension, Router};
 use config::Config;
-// use todo_usecase::interactor::Interactor;
-
-#[derive(Debug, Clone)]
-pub struct CustomInteractor;
-impl CustomInteractor {
-    pub fn use_case(&self) -> String {
-        "call use_case()".into()
-    }
-}
+use gateway::GatewayImpl;
+use todo_usecase::interactor::Interactor;
 
 #[tokio::main]
 async fn main() {
     tracing_subscriber::fmt::init();
     let config = Config::from_env();
-    let interactor = Arc::new(CustomInteractor);
+    let gateway = GatewayImpl::build(&config);
+    let interactor = Arc::new(Interactor {
+        gateway: Box::new(gateway),
+    });
     let app = Router::new()
         .route("/", get(root))
         .nest("/", api::create_todo::builder())
