@@ -1,4 +1,5 @@
 mod bad_request;
+pub use bad_request::BadRequestError;
 
 use std::collections::HashMap;
 
@@ -15,34 +16,19 @@ pub trait BaseError: Into<RestError> {
         HashMap::new()
     }
     /// json化
-    fn to_json(&self) -> Value {
+    fn to_json(&self) -> Json<Value> {
         let mut json = self.extends();
         json.insert("type".into(), self.error_type().into());
         json.insert("title".into(), self.title().into());
-        json!(json)
+        Json(json!(json))
     }
 }
 
-pub enum RestError {
-    BadRequest(Value),
-    InternalServerError(Value),
-}
-
-impl RestError {
-    fn to_json(&self) -> Json<Value> {
-        match self {
-            Self::BadRequest(v) => Json(v.to_owned()),
-            Self::InternalServerError(v) => Json(v.to_owned()),
-        }
-    }
-}
+type ErrorBody = Json<Value>;
+pub struct RestError(StatusCode, ErrorBody);
 
 impl IntoResponse for RestError {
     fn into_response(self) -> axum::response::Response {
-        let status_code = match self {
-            Self::BadRequest(_) => StatusCode::BAD_REQUEST,
-            Self::InternalServerError(_) => StatusCode::INTERNAL_SERVER_ERROR,
-        };
-        (status_code, self.to_json()).into_response()
+        (self.0, self.1).into_response()
     }
 }
