@@ -1,7 +1,7 @@
 use std::fmt::Debug;
 
 use axum::http::StatusCode;
-use enum_display::EnumDisplay;
+use strum::Display;
 
 use crate::api::Operation;
 
@@ -14,7 +14,7 @@ pub struct BadRequestError {
     title: String,
 }
 
-#[derive(Debug, EnumDisplay)]
+#[derive(Debug, Display)]
 enum BadRequestType {
     Validation,
 }

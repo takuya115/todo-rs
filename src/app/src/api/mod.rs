@@ -1,8 +1,8 @@
 pub mod create_todo;
 
-use enum_display::EnumDisplay;
+use strum::Display;
 
-#[derive(Debug, EnumDisplay)]
+#[derive(Debug, Display)]
 pub enum Operation {
     CreateTodo,
 }
