@@ -1,37 +1,32 @@
 use std::fmt::Debug;
 
+use super::{BaseError, RestError};
 use axum::http::StatusCode;
 use enum_display::EnumDisplay;
 
-use crate::api::Operation;
-
-use super::{BaseError, RestError};
-
 #[derive(Debug)]
 pub struct BadRequestError {
-    operation: Operation,
-    sub_error: BadRequestType,
+    error_type: ErrorType,
     title: String,
 }
 
 #[derive(Debug, EnumDisplay)]
-enum BadRequestType {
+enum ErrorType {
     Validation,
 }
 
 impl BadRequestError {
-    pub fn validation<A: Debug>(operation: Operation) -> impl FnOnce(A) -> Self {
-        |title| Self {
-            operation,
+    pub fn validation<A: Debug>(title: A) -> Self {
+        Self {
             title: format!("{:?}", title),
-            sub_error: BadRequestType::Validation,
+            error_type: ErrorType::Validation,
         }
     }
 }
 
 impl BaseError for BadRequestError {
     fn error_type(&self) -> String {
-        format!("{}/{}", self.operation, self.sub_error)
+        format!("{}", self.error_type)
     }
 
     fn title(&self) -> String {
