@@ -1,6 +1,6 @@
 use sea_orm::{ActiveModelTrait, Set};
 use todo_model::task::{Task, TaskBody, TaskId};
-use todo_usecase::error::{Error, Result};
+use todo_usecase::{Error, Result};
 
 use crate::entity::todo_table;
 
@@ -18,7 +18,7 @@ impl RdbServiceImpl {
         let record = todo_entity
             .insert(&conn)
             .await
-            .map_err(|err| Error::Unknown(Box::new(err)))?;
+            .map_err(|err| Error::Unexpected(Box::new(err)))?;
         Ok(record.into())
     }
 }

@@ -9,13 +9,13 @@ use axum::{
 use serde::{Deserialize, Serialize};
 use todo_model::task::TaskBody;
 use todo_usecase::{
-    error::Error,
     interactor::{create_todo::CreateTodoInput, Interactor},
+    Error,
 };
 
 use crate::error::{BadRequestError, InternalServerError, RestError};
 
-pub fn builder() -> Router {
+pub fn router() -> Router {
     Router::new().route("/todo", post(create_todo))
 }
 
@@ -47,13 +47,13 @@ async fn create_todo(
 
 fn to_input(value: RequestBody) -> Result<CreateTodoInput, Error> {
     Ok(CreateTodoInput {
-        content: TaskBody::from_str(&value.task).map_err(Error::invalid_input)?,
+        task: TaskBody::from_str(&value.task).map_err(Error::invalid_input)?,
     })
 }
 
-fn to_rest_error(err: todo_usecase::error::Error) -> RestError {
+fn to_rest_error(err: todo_usecase::Error) -> RestError {
     match err {
-        todo_usecase::error::Error::InvalidInput(err) => BadRequestError::validation(err).into(),
+        todo_usecase::Error::InvalidInput(err) => BadRequestError::invalid_input(err).into(),
         _ => InternalServerError::unexpected(err).into(),
     }
 }

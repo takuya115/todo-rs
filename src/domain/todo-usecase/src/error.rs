@@ -8,8 +8,8 @@ pub type Result<T> = std::result::Result<T, Error>;
 pub enum Error {
     #[error("invalid input: {0:?}")]
     InvalidInput(Box<dyn Debug>),
-    #[error("unknown: {0:?}")]
-    Unknown(Box<dyn Debug>),
+    #[error("unexpected: {0:?}")]
+    Unexpected(Box<dyn Debug>),
 }
 
 impl Error {

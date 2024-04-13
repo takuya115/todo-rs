@@ -12,13 +12,13 @@ pub struct BadRequestError {
 
 #[derive(Debug, Display)]
 enum ErrorType {
-    Validation,
+    InvalidInput,
 }
 
 impl BadRequestError {
-    pub fn validation<A: Debug>(title: A) -> Self {
+    pub fn invalid_input<A: Debug>(title: A) -> Self {
         let inner = |title: String, error_type: ErrorType| Self { title, error_type };
-        inner(format!("{:?}", title), ErrorType::Validation)
+        inner(format!("{:?}", title), ErrorType::InvalidInput)
     }
 }
 
@@ -35,5 +35,16 @@ impl BaseError for BadRequestError {
 impl From<BadRequestError> for RestError {
     fn from(value: BadRequestError) -> Self {
         Self(StatusCode::BAD_REQUEST, value.to_json())
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn ok_invalid_input() {
+        let err = BadRequestError::invalid_input(todo_usecase::Error::invalid_input("test-error"));
+        println!("{:?}", err)
     }
 }

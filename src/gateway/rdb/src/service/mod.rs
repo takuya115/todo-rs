@@ -2,10 +2,7 @@ mod insert_todo;
 use async_trait::async_trait;
 use sea_orm::{ConnectOptions, Database, DatabaseConnection};
 use todo_model::task::{Task, TaskBody, TaskId};
-use todo_usecase::{
-    error::{Error, Result},
-    gateway::rdb::RdbService,
-};
+use todo_usecase::{gateway::rdb::RdbService, Error, Result};
 
 use crate::entity::todo_table;
 
@@ -21,7 +18,7 @@ impl RdbServiceImpl {
         opt.max_connections(10).min_connections(2);
         Database::connect(opt)
             .await
-            .map_err(|err| Error::Unknown(Box::new(err)))
+            .map_err(|err| Error::Unexpected(Box::new(err)))
     }
 }
 
