@@ -1,4 +1,4 @@
-use std::fmt::Debug;
+use std::fmt::{Debug, Display};
 
 use super::{BaseError, RestError};
 use axum::http::StatusCode;
@@ -16,9 +16,9 @@ enum ErrorType {
 }
 
 impl BadRequestError {
-    pub fn invalid_input<A: Debug>(title: A) -> Self {
+    pub fn invalid_input<A: Display>(title: A) -> Self {
         let inner = |title: String, error_type: ErrorType| Self { title, error_type };
-        inner(format!("{:?}", title), ErrorType::InvalidInput)
+        inner(format!("{}", title), ErrorType::InvalidInput)
     }
 }
 

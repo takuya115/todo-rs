@@ -53,7 +53,7 @@ fn to_input(value: RequestBody) -> Result<CreateTodoInput, Error> {
 
 fn to_rest_error(err: todo_usecase::Error) -> RestError {
     match err {
-        todo_usecase::Error::InvalidInput(err) => BadRequestError::invalid_input(err).into(),
+        todo_usecase::Error::InvalidInput(..) => BadRequestError::invalid_input(err).into(),
         _ => InternalServerError::unexpected(err).into(),
     }
 }
