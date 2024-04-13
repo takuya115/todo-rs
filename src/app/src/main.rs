@@ -1,7 +1,7 @@
 mod api;
 mod config;
+mod error;
 mod gateway;
-mod rest_error;
 
 use std::sync::Arc;
 

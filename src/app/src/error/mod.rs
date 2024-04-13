@@ -1,5 +1,7 @@
-mod bad_request;
-pub use bad_request::BadRequestError;
+mod s400_bad_request;
+pub use s400_bad_request::BadRequestError;
+mod s500_internal_server_ereror;
+pub use s500_internal_server_ereror::InternalServerError;
 
 use std::collections::HashMap;
 

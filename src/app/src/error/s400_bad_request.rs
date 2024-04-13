@@ -17,10 +17,8 @@ enum ErrorType {
 
 impl BadRequestError {
     pub fn validation<A: Debug>(title: A) -> Self {
-        Self {
-            title: format!("{:?}", title),
-            error_type: ErrorType::Validation,
-        }
+        let inner = |title: String, error_type: ErrorType| Self { title, error_type };
+        inner(format!("{:?}", title), ErrorType::Validation)
     }
 }
 
