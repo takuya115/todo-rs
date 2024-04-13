@@ -1,5 +1,4 @@
-# usecase
-
+# ユースケース
 
 ```plantuml
 left to right direction
@@ -17,9 +16,37 @@ package db {
 
 :User: --> uc1
 uc1 --> db1
+uc1 --> db3
 :User: --> uc2
 uc2 --> db2
 :User: --> uc3
 uc3 --> db3
 
 ```
+
+---
+
+## UC1-TODOを作成する
+
+### UC1-エラー
+
+- バリデーションエラー: 400
+- DBエラー
+  - DBに接続できない: 500
+  - TODOが重複している: 400
+
+## UC2-TODOを完了する
+
+### UC2-エラー
+
+- バリデーションエラー: 400
+- DBエラー
+  - DBに接続できない: 500
+  - 対象のTODOが存在しない: 400
+
+## UC3-todoを取得する
+
+### UC3-エラー
+
+- DBにエラー
+  - DBに接続できない: 500

@@ -8,10 +8,7 @@ use todo_usecase::{
     interactor::{create_todo::CreateTodoInput, Interactor},
 };
 
-use crate::{
-    api::Operation,
-    rest_error::{BadRequestError, RestError},
-};
+use crate::rest_error::{BadRequestError, RestError};
 
 pub fn builder() -> Router {
     Router::new().route("/todo", post(create_todo))
@@ -26,7 +23,7 @@ async fn create_todo(
     Extension(interactor): Extension<Arc<Interactor>>,
     Json(body): Json<CreateToDoBody>,
 ) -> Result<(), RestError> {
-    let input = to_input(body).map_err(BadRequestError::validation(Operation::CreateTodo))?;
+    let input = to_input(body).map_err(BadRequestError::validation)?;
     let result = interactor.create_todo(input).await;
     println!("{:?}", result);
     Ok(())
