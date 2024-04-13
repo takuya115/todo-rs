@@ -1,4 +1,4 @@
-use std::str::FromStr;
+use std::{fmt::Display, str::FromStr};
 
 use uuid::Uuid;
 
@@ -17,6 +17,12 @@ impl TaskId {
     }
     pub fn generate() -> Self {
         TaskId(Uuid::new_v4())
+    }
+}
+
+impl Display for TaskId {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.0.to_string())
     }
 }
 
