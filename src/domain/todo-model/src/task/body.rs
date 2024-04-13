@@ -3,22 +3,22 @@ use std::{fmt::Display, str::FromStr};
 use crate::ModelError;
 
 #[derive(Debug)]
-pub struct Text(String);
+pub struct TaskBody(String);
 
-impl Text {
+impl TaskBody {
     const MAX_LENGTH: usize = 1000;
     pub fn from_str_unchecked(s: &str) -> Self {
         Self(s.into())
     }
 }
 
-impl Display for Text {
+impl Display for TaskBody {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", self.0)
     }
 }
 
-impl FromStr for Text {
+impl FromStr for TaskBody {
     type Err = ModelError;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let s = s.trim();
@@ -40,7 +40,7 @@ mod test {
     #[case::max_length(&"max文字数@123".repeat(100))]
     #[case::trimed("\nmax文字数@123\n")]
     fn ok_from_str(input: &str) {
-        let text = Text::from_str(input).expect("error");
+        let text = TaskBody::from_str(input).expect("error");
         assert_eq!(text.to_string(), input.trim().to_string())
     }
 
@@ -48,7 +48,7 @@ mod test {
     #[case::empty("")]
     #[case::max_length(&format!("{}a", "max文字数@123".repeat(100)))]
     fn err_from_str(input: &str) {
-        let text = Text::from_str(input);
+        let text = TaskBody::from_str(input);
         assert!(text.is_err())
     }
 }

@@ -2,7 +2,7 @@ use std::{str::FromStr, sync::Arc};
 
 use axum::{routing::post, Extension, Json, Router};
 use serde::Deserialize;
-use todo_model::Text;
+use todo_model::task::TaskBody;
 use todo_usecase::{
     error::Error,
     interactor::{create_todo::CreateTodoInput, Interactor},
@@ -34,6 +34,6 @@ async fn create_todo(
 
 fn to_input(value: CreateToDoBody) -> Result<CreateTodoInput, Error> {
     Ok(CreateTodoInput {
-        content: Text::from_str(&value.content).map_err(Error::invalid_input)?,
+        content: TaskBody::from_str(&value.content).map_err(Error::invalid_input)?,
     })
 }

@@ -1,5 +1,5 @@
 use sea_orm::{ActiveModelTrait, Set};
-use todo_model::{Text, Todo, TodoId};
+use todo_model::task::{Task, TaskBody, TaskId};
 use todo_usecase::error::{Error, Result};
 
 use crate::entity::todo_table;
@@ -7,7 +7,7 @@ use crate::entity::todo_table;
 use super::RdbServiceImpl;
 
 impl RdbServiceImpl {
-    pub(crate) async fn handle_create_todo(&self, id: TodoId, content: Text) -> Result<Todo> {
+    pub(crate) async fn handle_create_todo(&self, id: TaskId, content: TaskBody) -> Result<Task> {
         let conn = self.connect().await?;
         let todo_entity = todo_table::ActiveModel {
             id: Set(id.into()),

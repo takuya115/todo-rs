@@ -1,7 +1,7 @@
 mod insert_todo;
 use async_trait::async_trait;
 use sea_orm::{ConnectOptions, Database, DatabaseConnection};
-use todo_model::{Text, Todo, TodoId};
+use todo_model::task::{Task, TaskBody, TaskId};
 use todo_usecase::{
     error::{Error, Result},
     gateway::rdb::RdbService,
@@ -27,16 +27,16 @@ impl RdbServiceImpl {
 
 #[async_trait]
 impl RdbService for RdbServiceImpl {
-    async fn create_todo(&self, id: TodoId, content: Text) -> Result<Todo> {
+    async fn create_todo(&self, id: TaskId, content: TaskBody) -> Result<Task> {
         self.handle_create_todo(id, content).await
     }
 }
 
-impl From<todo_table::Model> for Todo {
+impl From<todo_table::Model> for Task {
     fn from(value: todo_table::Model) -> Self {
         Self {
             id: value.id.into(),
-            content: Text::from_str_unchecked(&value.content),
+            content: TaskBody::from_str_unchecked(&value.content),
             created_at: value.created_at,
             updated_at: value.updated_at,
             done: value.done,
