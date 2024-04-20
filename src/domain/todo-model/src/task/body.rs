@@ -23,8 +23,10 @@ impl FromStr for TaskBody {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let s = s.trim();
         match s.chars().count() {
-            0 => Err(ModelError::Validation("Text is empty".into())),
-            c if c > Self::MAX_LENGTH => Err(ModelError::Validation("Over upper limit".into())),
+            0 => Err(ModelError::Validation("TaskBody/Text is empty".into())),
+            c if c > Self::MAX_LENGTH => {
+                Err(ModelError::Validation("TaskBody/Over upper limit".into()))
+            }
             _ => Ok(Self(s.into())),
         }
     }

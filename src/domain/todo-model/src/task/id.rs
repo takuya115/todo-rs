@@ -10,7 +10,7 @@ impl TaskId {
     pub fn new<A: Into<String>>(value: A) -> Result<Self, ModelError> {
         let inner = |value: String| {
             let uuid = Uuid::from_str(&value)
-                .map_err(|err| ModelError::Validation(format!("{:?}", err)))?;
+                .map_err(|err| ModelError::Validation(format!("TaskId/{:?}", err)))?;
             Ok(Self(uuid))
         };
         inner(value.into())
