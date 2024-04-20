@@ -4,7 +4,7 @@ use sea_orm::{ConnectOptions, Database, DatabaseConnection};
 use todo_model::task::{Task, TaskBody, TaskId};
 use todo_usecase::{gateway::rdb::RdbService, Error, Result};
 
-use crate::entity::todo_table;
+use crate::entity::tasks;
 
 /// RDBの具象
 pub struct RdbServiceImpl {
@@ -24,13 +24,13 @@ impl RdbServiceImpl {
 
 #[async_trait]
 impl RdbService for RdbServiceImpl {
-    async fn create_todo(&self, id: TaskId, content: TaskBody) -> Result<Task> {
-        self.handle_create_todo(id, content).await
+    async fn create_task(&self, id: TaskId, content: TaskBody) -> Result<Task> {
+        self.handle_create_task(id, content).await
     }
 }
 
-impl From<todo_table::Model> for Task {
-    fn from(value: todo_table::Model) -> Self {
+impl From<tasks::Model> for Task {
+    fn from(value: tasks::Model) -> Self {
         Self {
             id: value.id.into(),
             content: TaskBody::from_str_unchecked(&value.content),

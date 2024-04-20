@@ -5,5 +5,5 @@ use crate::error::Result;
 
 #[async_trait]
 pub trait RdbService {
-    async fn create_todo(&self, id: TaskId, content: TaskBody) -> Result<Task>;
+    async fn create_task(&self, id: TaskId, content: TaskBody) -> Result<Task>;
 }

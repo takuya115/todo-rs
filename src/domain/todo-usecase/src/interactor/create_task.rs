@@ -4,15 +4,15 @@ use crate::error::Result;
 
 use super::Interactor;
 
-pub struct CreateTodoInput {
+pub struct CreateTaskInput {
     pub task: TaskBody,
 }
 
 impl Interactor {
-    pub async fn create_todo(&self, input: CreateTodoInput) -> Result<Task> {
+    pub async fn create_task(&self, input: CreateTaskInput) -> Result<Task> {
         self.gateway
             .db_service()
-            .create_todo(TaskId::generate(), input.task)
+            .create_task(TaskId::generate(), input.task)
             .await
     }
 }

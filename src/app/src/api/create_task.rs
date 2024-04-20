@@ -9,14 +9,14 @@ use axum::{
 use serde::{Deserialize, Serialize};
 use todo_model::task::TaskBody;
 use todo_usecase::{
-    interactor::{create_todo::CreateTodoInput, Interactor},
+    interactor::{create_task::CreateTaskInput, Interactor},
     Error,
 };
 
 use crate::error::ErrorResponse;
 
 pub fn router() -> Router {
-    Router::new().route("/todo", post(create_todo))
+    Router::new().route("/todo", post(create_task))
 }
 
 #[derive(Debug, Deserialize)]
@@ -30,12 +30,12 @@ pub struct ResponseBody {
     task: String,
 }
 
-async fn create_todo(
+async fn create_task(
     Extension(interactor): Extension<Arc<Interactor>>,
     Json(body): Json<RequestBody>,
 ) -> Result<Response> {
     let input = to_input(body).map_err(to_rest_error)?;
-    let result = interactor.create_todo(input).await.map_err(to_rest_error)?;
+    let result = interactor.create_task(input).await.map_err(to_rest_error)?;
     println!("{:?}", result);
     let response = ResponseBody {
         id: result.id.to_string(),
@@ -45,8 +45,8 @@ async fn create_todo(
     Ok((StatusCode::OK, Json(response)).into_response())
 }
 
-fn to_input(value: RequestBody) -> Result<CreateTodoInput, Error> {
-    Ok(CreateTodoInput {
+fn to_input(value: RequestBody) -> Result<CreateTaskInput, Error> {
+    Ok(CreateTaskInput {
         task: TaskBody::from_str(&value.task).map_err(Error::invalid_input)?,
     })
 }

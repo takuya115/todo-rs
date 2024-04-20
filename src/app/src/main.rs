@@ -20,7 +20,7 @@ async fn main() {
     });
     let app = Router::new()
         .route("/", get(root))
-        .nest("/", api::create_todo::router())
+        .nest("/", api::create_task::router())
         .layer(Extension(interactor));
     let listener = tokio::net::TcpListener::bind(&config.server_host)
         .await
