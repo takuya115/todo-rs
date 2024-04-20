@@ -11,29 +11,24 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(TodoTable::Table)
+                    .table(Tasks::Table)
                     .if_not_exists()
+                    .col(ColumnDef::new(Tasks::Id).uuid().not_null().primary_key())
+                    .col(ColumnDef::new(Tasks::Content).string().not_null())
                     .col(
-                        ColumnDef::new(TodoTable::Id)
-                            .uuid()
-                            .not_null()
-                            .primary_key(),
-                    )
-                    .col(ColumnDef::new(TodoTable::Content).string().not_null())
-                    .col(
-                        ColumnDef::new(TodoTable::CreatedAt)
+                        ColumnDef::new(Tasks::CreatedAt)
                             .date_time()
                             .not_null()
                             .default(Expr::current_timestamp()),
                     )
                     .col(
-                        ColumnDef::new(TodoTable::UpdatedAt)
+                        ColumnDef::new(Tasks::UpdatedAt)
                             .date_time()
                             .not_null()
                             .default(Expr::current_timestamp()),
                     )
                     .col(
-                        ColumnDef::new(TodoTable::Done)
+                        ColumnDef::new(Tasks::Done)
                             .boolean()
                             .not_null()
                             .default(false),
@@ -46,13 +41,13 @@ impl MigrationTrait for Migration {
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         // Replace the sample below with your own migration scripts
         manager
-            .drop_table(Table::drop().table(TodoTable::Table).to_owned())
+            .drop_table(Table::drop().table(Tasks::Table).to_owned())
             .await
     }
 }
 
 #[derive(DeriveIden)]
-enum TodoTable {
+enum Tasks {
     Table,
     Id,
     Content,
