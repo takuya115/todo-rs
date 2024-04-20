@@ -13,7 +13,7 @@ use todo_usecase::{
     Error,
 };
 
-use crate::error::{BadRequestError, InternalServerError, RestError};
+use crate::error::ErrorResponse;
 
 pub fn router() -> Router {
     Router::new().route("/todo", post(create_todo))
@@ -51,9 +51,9 @@ fn to_input(value: RequestBody) -> Result<CreateTodoInput, Error> {
     })
 }
 
-fn to_rest_error(err: todo_usecase::Error) -> RestError {
+fn to_rest_error(err: todo_usecase::Error) -> ErrorResponse {
     match err {
-        todo_usecase::Error::InvalidInput(..) => BadRequestError::invalid_input(err).into(),
-        _ => InternalServerError::unexpected(err).into(),
+        todo_usecase::Error::InvalidInput(..) => ErrorResponse::invalid_input(err),
+        _ => ErrorResponse::internal(err),
     }
 }

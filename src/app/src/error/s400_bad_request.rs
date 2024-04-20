@@ -1,40 +1,17 @@
-use std::fmt::{Debug, Display};
+use std::fmt::Display;
 
-use super::{BaseError, RestError};
-use axum::http::StatusCode;
-use strum::Display;
+use super::{DefaultError, ErrorResponse, ErrorType};
 
-#[derive(Debug)]
-pub struct BadRequestError {
-    error_type: ErrorType,
-    title: String,
-}
-
-#[derive(Debug, Display)]
-enum ErrorType {
-    InvalidInput,
-}
-
-impl BadRequestError {
+impl ErrorResponse {
     pub fn invalid_input<A: Display>(title: A) -> Self {
-        let inner = |title: String, error_type: ErrorType| Self { title, error_type };
-        inner(format!("{}", title), ErrorType::InvalidInput)
-    }
-}
-
-impl BaseError for BadRequestError {
-    fn error_type(&self) -> String {
-        format!("{}", self.error_type)
-    }
-
-    fn title(&self) -> String {
-        self.title.clone()
-    }
-}
-
-impl From<BadRequestError> for RestError {
-    fn from(value: BadRequestError) -> Self {
-        Self(StatusCode::BAD_REQUEST, value.to_json())
+        let inner = |title: String| {
+            let error = DefaultError {
+                title,
+                error_type: ErrorType::InvalidInput,
+            };
+            Self::BadRequest(error)
+        };
+        inner(format!("{}", title))
     }
 }
 
@@ -44,7 +21,7 @@ mod test {
 
     #[test]
     fn ok_invalid_input() {
-        let err = BadRequestError::invalid_input(todo_usecase::Error::invalid_input("test-error"));
-        println!("{:?}", err)
+        let err = ErrorResponse::invalid_input("test-error");
+        println!("{:?}", err);
     }
 }

@@ -1,36 +1,44 @@
 mod s400_bad_request;
-pub use s400_bad_request::BadRequestError;
-mod s500_internal_server_ereror;
-pub use s500_internal_server_ereror::InternalServerError;
+mod s500_internal_server_error;
 
-use std::collections::HashMap;
+use serde::Serialize;
+use strum::Display;
 
 use axum::{http::StatusCode, response::IntoResponse, Json};
 use serde_json::{json, Value};
 
-pub trait BaseError: Into<RestError> {
-    /// エラータイプ
-    fn error_type(&self) -> String;
-    /// タイトル
-    fn title(&self) -> String;
-    /// 追加要素
-    fn extends(&self) -> HashMap<String, Value> {
-        HashMap::new()
-    }
+#[derive(Debug, Display, Serialize)]
+enum ErrorType {
+    Unexpected,
+    InvalidInput,
+}
+
+#[derive(Debug, Serialize)]
+pub struct DefaultError {
+    #[serde(rename = "type")]
+    error_type: ErrorType,
+    title: String,
+}
+
+impl DefaultError {
     /// json化
     fn to_json(&self) -> Json<Value> {
-        let mut json = self.extends();
-        json.insert("type".into(), self.error_type().into());
-        json.insert("title".into(), self.title().into());
-        Json(json!(json))
+        Json(json!(self))
     }
 }
 
-type ErrorBody = Json<Value>;
-pub struct RestError(StatusCode, ErrorBody);
+#[derive(Debug)]
+pub enum ErrorResponse {
+    BadRequest(DefaultError),
+    Internal(DefaultError),
+}
 
-impl IntoResponse for RestError {
+impl IntoResponse for ErrorResponse {
     fn into_response(self) -> axum::response::Response {
-        (self.0, self.1).into_response()
+        match self {
+            Self::BadRequest(err) => (StatusCode::BAD_REQUEST, err.to_json()),
+            Self::Internal(err) => (StatusCode::INTERNAL_SERVER_ERROR, err.to_json()),
+        }
+        .into_response()
     }
 }
