@@ -1,5 +1,5 @@
 [package]
-name = "app"
+name = "todo-app"
 version = "0.1.0"
 edition = "2021"
 
@@ -10,10 +10,10 @@ todo-model = { path = "../domain/todo-model" }
 todo-usecase = { path = "../domain/todo-usecase" }
 rdb = { path = "../gateway/rdb" }
 
-axum = "0.7.3"
-tokio = { version = "1.35.1", features = ["full"] }
-tracing = "0.1.40"
-tracing-subscriber = "0.3.18"
-strum = { version = "0.26.1", features = ["derive"] }
+axum = "0.7"
+tokio = { version = "1.36", features = ["full"] }
+tracing = "0.1"
+tracing-subscriber = "0.3"
+strum = { version = "0.26", features = ["derive"] }
 serde = { workspace = true }
 serde_json = { workspace = true }
