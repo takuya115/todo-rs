@@ -1,5 +1,5 @@
 [workspace]
-members = ["./src/app"]
+members = ["./src/app", "./migration"]
 exclude = ["./migration"]
 
 [workspace.dependencies]
