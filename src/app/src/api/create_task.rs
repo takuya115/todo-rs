@@ -12,6 +12,7 @@ use todo_usecase::{
     interactor::{create_task::CreateTaskInput, Interactor},
     Error,
 };
+use tracing::info;
 
 use crate::error::ErrorResponse;
 
@@ -34,9 +35,9 @@ async fn create_task(
     Extension(interactor): Extension<Arc<Interactor>>,
     Json(body): Json<RequestBody>,
 ) -> Result<Response> {
+    info!("[create_task] accept");
     let input = to_input(body).map_err(to_rest_error)?;
     let result = interactor.create_task(input).await.map_err(to_rest_error)?;
-    println!("{:?}", result);
     let response = ResponseBody {
         id: result.id.to_string(),
         task: result.content.to_string(),

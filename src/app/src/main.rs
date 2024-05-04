@@ -9,6 +9,8 @@ use axum::{routing::get, Extension, Router};
 use config::Config;
 use gateway::GatewayImpl;
 use todo_usecase::interactor::Interactor;
+use tower_http::trace::TraceLayer;
+use tracing::info;
 
 #[tokio::main]
 async fn main() {
@@ -21,7 +23,23 @@ async fn main() {
     let app = Router::new()
         .route("/", get(root))
         .nest("/", api::create_task::router())
-        .layer(Extension(interactor));
+        .layer(Extension(interactor))
+        .layer(
+            // 入力と応答をログ出力
+            TraceLayer::new_for_http()
+                .on_request(
+                    |req: &axum::http::Request<axum::body::Body>, _span: &tracing::Span| {
+                        println!("[app] reqest={:?}", req);
+                    },
+                )
+                .on_response(
+                    |res: &axum::http::Response<axum::body::Body>,
+                     _latency: std::time::Duration,
+                     _span: &tracing::Span| {
+                        println!("[app] response={:?}", res);
+                    },
+                ),
+        );
     let listener = tokio::net::TcpListener::bind(&config.server_host)
         .await
         .unwrap();
