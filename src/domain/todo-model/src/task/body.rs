@@ -1,13 +1,20 @@
 use std::{fmt::Display, str::FromStr};
 
-use crate::ModelError;
+use crate::typed::{StringValidator, ValidationError};
 
 #[derive(Debug)]
 pub struct TaskBody(String);
 
 impl TaskBody {
     const MAX_LENGTH: usize = 1000;
-    pub fn from_str_unchecked(s: &str) -> Self {
+    pub fn new<A: Into<String>>(input: A) -> Result<Self, ValidationError> {
+        let value = StringValidator::<TaskBody>::default()
+            .set_upper_limit(Self::MAX_LENGTH)
+            .validation(input)?;
+        Ok(Self(value))
+    }
+
+    pub fn new_unchecked(s: &str) -> Self {
         Self(s.into())
     }
 }
@@ -19,16 +26,9 @@ impl Display for TaskBody {
 }
 
 impl FromStr for TaskBody {
-    type Err = ModelError;
+    type Err = ValidationError;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        match s.chars().count() {
-            0 => Err(ModelError::Validation("TaskBody/Text is empty".into())),
-            c if c > Self::MAX_LENGTH => {
-                Err(ModelError::Validation("TaskBody/Over upper limit".into()))
-            }
-            _ => Ok(Self(s.into())),
-        }
+        Self::new(s)
     }
 }
 

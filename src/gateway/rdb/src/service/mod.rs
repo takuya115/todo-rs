@@ -33,7 +33,7 @@ impl From<tasks::Model> for Task {
     fn from(value: tasks::Model) -> Self {
         Self {
             id: value.id.into(),
-            content: TaskBody::from_str_unchecked(&value.content),
+            content: TaskBody::new_unchecked(&value.content),
             created_at: value.created_at,
             updated_at: value.updated_at,
             done: value.done,
