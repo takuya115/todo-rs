@@ -2,15 +2,18 @@ use std::{fmt::Display, str::FromStr};
 
 use uuid::Uuid;
 
-use crate::ModelError;
+use crate::{typed::ValidationError, ModelError};
 
 #[derive(Debug)]
 pub struct TaskId(Uuid);
 impl TaskId {
-    pub fn new<A: Into<String>>(value: A) -> Result<Self, ModelError> {
+    pub fn new<A: Into<String>>(value: A) -> Result<Self, ValidationError> {
         let inner = |value: String| {
-            let uuid = Uuid::from_str(&value)
-                .map_err(|err| ModelError::Validation(format!("TaskId/{:?}", err)))?;
+            let uuid = Uuid::from_str(&value).map_err(|err| ValidationError::InvalidFormat {
+                src: "TaskId".into(),
+                input: value,
+                detail: format!("{:?}", err),
+            })?;
             Ok(Self(uuid))
         };
         inner(value.into())
@@ -27,7 +30,7 @@ impl Display for TaskId {
 }
 
 impl FromStr for TaskId {
-    type Err = ModelError;
+    type Err = ValidationError;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         Self::new(s)
     }
@@ -58,6 +61,8 @@ mod test {
     #[test]
     fn err_from_str() {
         let s = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-        assert!(TaskId::from_str(s).is_err())
+        let result = TaskId::from_str(s);
+        assert!(result.is_err());
+        println!("{:#?}", result)
     }
 }

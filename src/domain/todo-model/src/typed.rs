@@ -17,6 +17,7 @@ impl<T> Default for StringValidator<T> {
     }
 }
 
+#[allow(dead_code)]
 impl<T> StringValidator<T> {
     pub fn set_upper_limit(mut self, limit: usize) -> Self {
         self.upper_limit = limit;
@@ -38,18 +39,18 @@ impl<T> StringValidator<T> {
 
             let v = v.trim();
             if v.is_empty() {
-                return Err(ValidationError::Empty { name });
+                return Err(ValidationError::Empty { src: name });
             }
             match v.chars().count() {
                 // 下限未満
                 c if c < self.lower_limit => Err(ValidationError::UnderLowerLimit {
-                    name,
+                    src: name,
                     input: c,
                     limit: self.lower_limit,
                 }),
                 // 上限より大きい
                 c if self.upper_limit < c => Err(ValidationError::OverUpperLimit {
-                    name,
+                    src: name,
                     input: c,
                     limit: self.upper_limit,
                 }),
@@ -62,16 +63,21 @@ impl<T> StringValidator<T> {
 
 #[derive(Debug)]
 pub enum ValidationError {
+    InvalidFormat {
+        src: String,
+        input: String,
+        detail: String,
+    },
     Empty {
-        name: String,
+        src: String,
     },
     UnderLowerLimit {
-        name: String,
+        src: String,
         input: usize,
         limit: usize,
     },
     OverUpperLimit {
-        name: String,
+        src: String,
         input: usize,
         limit: usize,
     },
