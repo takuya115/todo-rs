@@ -11,10 +11,18 @@ use gateway::GatewayImpl;
 use todo_usecase::interactor::Interactor;
 use tower_http::trace::TraceLayer;
 use tracing::info;
+use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
+#[tracing::instrument]
 #[tokio::main]
 async fn main() {
-    tracing_subscriber::fmt::init();
+    tracing_subscriber::registry()
+        .with(
+            tracing_subscriber::EnvFilter::try_from_default_env()
+                .unwrap_or_else(|_| "debug".into()),
+        )
+        .with(tracing_subscriber::fmt::layer())
+        .init();
     let config = Config::from_env();
     let gateway = GatewayImpl::build(&config);
     let interactor = Arc::new(Interactor {
@@ -29,14 +37,14 @@ async fn main() {
             TraceLayer::new_for_http()
                 .on_request(
                     |req: &axum::http::Request<axum::body::Body>, _span: &tracing::Span| {
-                        println!("[app] reqest={:?}", req);
+                        info!("[app] reqest={:?}", req);
                     },
                 )
                 .on_response(
                     |res: &axum::http::Response<axum::body::Body>,
                      _latency: std::time::Duration,
                      _span: &tracing::Span| {
-                        println!("[app] response={:?}", res);
+                        info!("[app] response={:?}", res);
                     },
                 ),
         );
