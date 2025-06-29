@@ -1,0 +1,108 @@
+openapi: 3.0.3
+servers: 
+  - url: https://api.todoapp.com
+
+info:
+  title: Todo API
+  version: 1.0.0
+  description: API for managing todos in a todo application.
+  license: 
+    name: MIT
+    url: https://opensource.org/license/mit/
+    
+
+paths:
+  /todos:
+    get:
+      summary: Get all todos
+      operationId: getTodos
+      security: []
+      responses:
+        '200':
+          description: A list of todos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Todo'
+        '400':
+          description: Bad request
+    post:
+      summary: Create a new todo
+      operationId: createTodo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewTodo'
+
+      responses:
+        '201':
+          description: Todo created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+        '400':
+          description: Bad request
+              
+  /todos/{id}/complete:
+    post:
+      summary: Mark a todo as completed
+      operationId: completeTodo
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the todo to mark as completed
+          schema:
+            type: string
+      security: []
+      responses:
+        '201':
+          description: Todo created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+        '400':
+          description: Bad request
+
+  /todos/{id}:
+    delete:
+      summary: Delete a todo
+      operationId: deleteTodo
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the todo to delete
+          schema:
+            type: string
+      security: []
+      responses:
+        '204':
+          description: Todo deleted successfully
+        '400':
+          description: Bad request
+
+components:
+  schemas:
+    Todo:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        completed:
+          type: boolean
+    NewTodo:
+      type: object
+      required:
+        - title
+      properties:
+        title:
+          type: string
